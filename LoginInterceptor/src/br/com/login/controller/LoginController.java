@@ -6,6 +6,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.login.dao.UsuarioDao;
+import br.com.login.interceptor.Security;
 import br.com.login.model.Usuario;
 import br.com.login.model.UsuarioSession;
 
@@ -25,11 +26,13 @@ public class LoginController {
 		this.usuarioDao = usuarioDao;
 	}
 
+	@Security
 	@Get
 	@Path({ "", "/login" })
 	public void login(){
 	}
 	
+	@Security
 	@Post
 	@Path("/login")
 	public void login(String login, String senha){
@@ -39,7 +42,6 @@ public class LoginController {
 		if (usuario != null) {
 			usuarioSession.setId(usuario.getId());
 			usuarioSession.setLogin(usuario.getLogin());
-			usuarioSession.setSenha(usuario.getSenha());
 			
 			result.redirectTo(IndexController.class).index();
 		} else {
@@ -47,4 +49,11 @@ public class LoginController {
 		}
 	}
 	
+	@Path("/logout")
+	public void logout(){
+		usuarioSession.setId(null);
+		usuarioSession.setLogin(null);
+		
+		result.redirectTo(this).login();
+	}
 }

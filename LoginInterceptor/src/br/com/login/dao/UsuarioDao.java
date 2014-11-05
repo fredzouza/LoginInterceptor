@@ -3,8 +3,10 @@ package br.com.login.dao;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.login.model.Usuario;
 
+@Component
 public class UsuarioDao {
 
 	private EntityManager em = new ConnectionFactory().openConnection();
@@ -14,7 +16,7 @@ public class UsuarioDao {
 	}
 	
 	public Usuario validaUsuario(Usuario usuario){
-		String sql = "from Usuario u where u.login = : login and u.senha = :senha";
+		String sql = "from Usuario where login = :login and senha = :senha";
 		TypedQuery<Usuario> q = em.createQuery(sql, Usuario.class);
 		q.setParameter("login", usuario.getLogin());
 		q.setParameter("senha", usuario.getSenha());
